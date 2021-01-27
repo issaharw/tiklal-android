@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<!-- <meta name="format-detection" content="telephone=no" /> 
+	<meta name="msapplication-tap-highlight" content="no" /> -->
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, target-densitydpi=device-dpi" />
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="SidurContent.js"></script>
+    <script src="content.js"></script>
+    <script src="scrolling.js"></script>
+    <script src="menu.js"></script>
+    <script src="settings.js"></script>
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="android.css">
+	<title>תכלאל</title>
+</head>
+<body>
+	<div id="main">
+		<div class="header">
+			<img src="settings.png" class="settingsIcon" onclick="showSettingsScreen()"/>
+			<span class="tiklalTitle">תִּכְּלַאל</span>
+			<div id="titleDiv" class="titleDiv"><span>סידור תפילה בנוסח הקדום והזך של<br> קהילות קודש תימן יע"א – בלדי</span></div>
+		</div>
+		<div id="menu" class="menu"></div>
+		<div id="container" class="container" style="display: none;"></div>
+		<div id="settings" class="settings" style="display: none;">
+			<div class="settingsSection">
+				<span class="settingsLabel">מצב כהה:</span>
+				<div class="settingsValue">
+					<span id="darkModeToggle" onclick="toggleDarkMode('#darkModeToggle')">כבוי</span>
+				</div>
+			</div>
+			<div class="settingsSection">
+				<span class="settingsLabel">צבעים ישנים:<br><span style="font-size: 0.5em;">(דורש הפעלה מחדש)</span></span>
+				<div class="settingsValue">
+					<span id="oldColorsToggle" onclick="toggleOldColors('#oldColorsToggle')">כבוי</span>
+				</div>
+			</div>
+			<div class="settingsSection">
+				<span class="settingsLabel">גודל הטקסט:</span>
+				<div class="settingsValue">
+					<span id="fontSize1" class="fontSizeLink" onclick="setFontSize('#fontSize1', 1)">א</span>
+					<span id="fontSize2" class="fontSizeLink" onclick="setFontSize('#fontSize2', 2)">א</span>
+					<span id="fontSize3" class="fontSizeLink" onclick="setFontSize('#fontSize3', 3)">א</span>
+					<span id="fontSize4" class="fontSizeLink" onclick="setFontSize('#fontSize4', 4)">א</span>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="footerButtons">
+				<div onClick='buildMainMenu()' class="footerButton">ראשי</div>
+				<div onClick='goToPrev();' class="footerButton"><img src="right.png"></div>
+				<div onClick='goToNext()' class="footerButton"><img src="left.png"></div>
+				<div onClick='goUp()' class="footerButton"><img src="up.png"></div>
+			</div>
+			<div class="footerText">
+				<hr style="width: 97%;">
+				<div class="hasut">בחסות <span class="nosachteiman">נוסח תימן</span> - המרכז להפצת יהדות תימן <a href="tel:036781444" class="footerTel">03-6781444</a> <a href="https://nosachteiman.co.il" target="_blank" class="nosachteimanLink">nosachteiman.co.il</a></div>
+				<div class="allrights">&#169; כל הזכיות שמורות, יו״ל ע״י ארגון ״אור ההלכה״ להפצת מסורת חכמי תימן <a href="tel:026420535" class="footerTel">02-6420535</a></div>
+			</div>
+		</div>
+	</div>
+	<script src="main.js"></script>
+</body>
+</html>
+
+ 
