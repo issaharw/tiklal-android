@@ -2,15 +2,15 @@ package com.issahar.tiklal
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.view.*
+
 
 private const val SP_DARK_MODE = "SP_DARK_MODE"
 private const val SP_OLD_COLORS = "SP_OLD_COLORS"
@@ -44,8 +44,11 @@ class MainActivity : AppCompatActivity() {
 
     private val client: WebViewClient = object : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-            return if (request.url.scheme != "settings")
-                false
+            return if (request.url.scheme != "settings") {
+                val intent = Intent(Intent.ACTION_VIEW, request.url)
+                startActivity(intent)
+                true
+            }
             else {
                 val darkMode = request.url.getQueryParameter("darkMode")
                 val oldColors = request.url.getQueryParameter("oldColors")
@@ -59,6 +62,5 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
-
     }
 }
