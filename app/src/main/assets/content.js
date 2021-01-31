@@ -157,6 +157,15 @@ var elementCreators = {
         });
         return elt;
     },
+    "A": function (children, index) {
+        var elt = window.document.createElement('a');
+        elt.classList.add("a-text");
+        elt.setAttribute('data-pos', index);
+        elt.setAttribute('href', children[0].nodeValue);
+        elt.setAttribute('target', '_blank');
+        elt.appendChild(children[1]);
+        return elt;
+    },
     "END": function (children, index) {
         var elt = window.document.createElement('img');
         elt.setAttribute('data-pos', index);

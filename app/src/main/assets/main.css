@@ -91,7 +91,7 @@
 .C11 { display: inline; font-family:"Remark Font"; font-size:3.6rem; font-style:normal; font-weight:normal; }
 .C21 { display: inline; }
 .C31 { display: inline; font-style:normal; font-weight:bold; }
-
+.a-text { color: inherit;}
 
 ::-webkit-scrollbar {
 	display: none;
@@ -244,11 +244,17 @@ div.footerButton > img {
 	align-items: center;
 }
 
-.allrights {
-	font-size: 2.4vw;
-	font-family: "Alef";
+.iluy {
+	font-size: 2.5vw;
+	font-family: "Shmulik";
 	font-weight: bold;
 	color: #25274B;
+}
+
+.iluyName {
+	font-weight: bold;
+	font-size: 1.4em;
+	color: inherit;
 }
 
 .hasut {
@@ -261,7 +267,7 @@ div.footerButton > img {
 .nosachteiman {
 	font-family: "Shmulik";
 	font-weight: bold;
-	font-size: 1.5em;
+	font-size: 1.6em;
 	color: inherit;
 }
 
