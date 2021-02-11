@@ -10,7 +10,7 @@ android {
         applicationId "com.issahar.tiklal"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 8
+        versionCode 9
         versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
