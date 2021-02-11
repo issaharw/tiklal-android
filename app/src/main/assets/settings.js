@@ -76,7 +76,5 @@ function showSettingsScreen() {
     $(fontSizeElementId).css("text-decoration", "none")
 
     updateTitle("הגדרות")
-    containerDiv.hide()
-    menuDiv.hide()
-    settingsDiv.show()
+    showScreen("settings")
 } 

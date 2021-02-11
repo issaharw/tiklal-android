@@ -3,7 +3,7 @@ function buildMainMenu() {
     var list = $("<ul class='menuList'>")
     menuDiv.append(list)
     var titles = getMajorTitles()
-    for(i = 0; i < titles.length; i++) {
+    for(var i = 0; i < titles.length; i++) {
         var item = $("<li>")
         list.append(item)
         var majorElem = $("<span class='menuItem'>").text(titles[i])
@@ -13,10 +13,7 @@ function buildMainMenu() {
     currentMajor = 0
     currentMinor = 0
     updateTitle('סידור תפילה בנוסח הקדום והזך של', 'קהילות קודש תימן יע"א – בלדי')
-    settingsDiv.hide()
-    containerDiv.hide()
-    menuDiv.show()
-                    
+    showScreen("menu")                    
 } 
 
 function buildMinorMenu(major) {
@@ -25,7 +22,7 @@ function buildMinorMenu(major) {
     var list = $("<ul class='menuList'>")
     menuDiv.append(list)
     var titles = getMinorTitles(major)
-    for(i = 0; i < titles.length; i++) {
+    for(var i = 0; i < titles.length; i++) {
         var item = $("<li>")
         list.append(item)
         var minorElem = $("<span class='menuItem'>").text(titles[i])
@@ -33,13 +30,11 @@ function buildMinorMenu(major) {
         item.append(minorElem)
     }
 
-    settingsDiv.hide()
-    containerDiv.hide()
-    menuDiv.show()
+    showScreen("menu")
 }
 
 
-function showContent(major, minor) {
+function showContent(major, minor, dataPositionsToHighlight = []) {
     currentMajor = major
     currentMinor = minor
     containerDiv.empty()
@@ -48,7 +43,7 @@ function showContent(major, minor) {
         var section = createSection(prev[0], prev[1])
         containerDiv.append(section)
     }
-    var section = createSection(major, minor)
+    var section = createSection(major, minor, dataPositionsToHighlight)
     containerDiv.append(section)
     var next = getNext(major, minor) 
     if (next[0] != -1) {
@@ -56,10 +51,26 @@ function showContent(major, minor) {
         containerDiv.append(section)
     }
     
-    settingsDiv.hide()    
-    menuDiv.hide()
-    containerDiv.show()
-    scrollToCurrent()
+    showScreen("container")
+    if (dataPositionsToHighlight.length > 0)
+        scrollToCurrent(dataPositionsToHighlight[0])
+    else
+        scrollToCurrent()
     updateTitleWithCurrent()
 }
 
+function showScreen(screen) {
+    searchDiv.hide()
+    settingsDiv.hide()    
+    menuDiv.hide()
+    containerDiv.hide()
+    if(screen == "container")
+        containerDiv.show()
+    if(screen == "menu")
+        menuDiv.show()
+    if(screen == "settings")
+        settingsDiv.show()
+    if(screen == "search")
+        searchDiv.show()
+    
+}

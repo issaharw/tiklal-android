@@ -7,10 +7,12 @@
 	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, target-densitydpi=device-dpi" />
     <script src="jquery-3.3.1.min.js"></script>
     <script src="SidurContent.js"></script>
+    <script src="SidurSearch.js"></script>
     <script src="content.js"></script>
     <script src="scrolling.js"></script>
     <script src="menu.js"></script>
     <script src="settings.js"></script>
+    <script src="search.js"></script>
 	<link rel="stylesheet" href="main.css">
 	<link rel="stylesheet" href="android.css">
 	<title>תכלאל</title>
@@ -24,6 +26,14 @@
 		</div>
 		<div id="menu" class="menu"></div>
 		<div id="container" class="container" style="display: none;"></div>
+		<div id="search" class="menu" style="display: none;">
+			<div class="searchActions">
+				<img class="clearSearch" src="x.png" onclick="clearSearchInput()"/>
+				<input type="text" id="searchInput"/>
+				<div onClick='search()' class="searchButton"><img src="search-white.png"></div>
+			</div>
+			<div id="searchResults" class="searchResults"></div>
+		</div>
 		<div id="settings" class="settings" style="display: none;">
 			<div class="settingsSection">
 				<span class="settingsLabel">מצב כהה:</span>
@@ -52,7 +62,7 @@
 				<div onClick='buildMainMenu()' class="footerButton">ראשי</div>
 				<div onClick='goToPrev();' class="footerButton"><img src="right.png"></div>
 				<div onClick='goToNext()' class="footerButton"><img src="left.png"></div>
-				<div onClick='goUp()' class="footerButton"><img src="up.png"></div>
+				<div onClick='showSearch()' class="footerSearchButton"><img src="search-white.png"></div>
 			</div>
 			<div class="footerText">
 				<hr style="width: 97%;">

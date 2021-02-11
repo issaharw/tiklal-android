@@ -3,6 +3,8 @@ var menuDiv = $("#menu")
 var containerDiv = $("#container")
 var settingsDiv = $("#settings")
 var titleDiv = $("#titleDiv")
+var searchDiv = $("#search")
+var searchResultsDiv = $("#searchResults")
 
 
 var isIpad = false

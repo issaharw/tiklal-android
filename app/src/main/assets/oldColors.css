@@ -35,7 +35,7 @@
 	color: #363636;
 }
 
-.footerButton {
+.footerButton, .footerSearchButton, .searchButton {
 	background: #542b22;
 	color: #FEF9E3;  
 }

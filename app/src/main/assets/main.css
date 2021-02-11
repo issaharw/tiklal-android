@@ -148,7 +148,6 @@ body{
 	font-family: "Shofar";
 	font-weight: bold;
 	color: #F8F9FB;
-	height: 100%;
 	font-size: 12vw;
 	vertical-align: middle;
 	padding-right: 1.5vw;
@@ -156,7 +155,6 @@ body{
 }
 
 .titleDiv {
-	height: 100%;
 	padding-right: 2vw;
 	padding-top: 5.4vh;
 	vertical-align: middle;
@@ -218,7 +216,7 @@ body{
 	padding-bottom: 0.5vh;
 }
 
-.footerButton {
+.footerButton, .footerSearchButton {
 	border-radius: 10px;
 	background: #426F8C;
 	color: #F8F9FB;  
@@ -235,6 +233,12 @@ div.footerButton > img {
 	padding: 0;
 	max-width:auto;
 	max-height:4vh;
+}
+
+div.footerSearchButton > img {
+	padding: 0.5vh;
+	max-width:auto;
+	max-height:3vh;
 }
 
 .footerText {
@@ -278,6 +282,47 @@ div.footerButton > img {
 
 .nosachteimanLink {
 	color: inherit;
+}
+
+/* --------------------------------------------------------------------------------  
+ ------------------------------------   Search   ------------------------------------  
+ ----------------------------------------------------------------------------------  */
+.searchActions {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-top: 1vh;
+	align-items: center;
+}
+
+.clearSearch {
+	max-width: 1.6vh;
+	max-height: auto;
+
+}
+
+#searchInput {
+	width: 50vw;
+	height: 2.2vh;
+	border-radius: 6px;
+	margin-right: 1vw;
+}
+
+.searchButton {
+	border-radius: 6px;
+	background: #426F8C;
+	color: #F8F9FB;  
+	text-align: center;
+	vertical-align: center;
+	width: 10vw;
+	height: 2.6vh;
+	margin-right: 1.6vw;
+}
+
+div.searchButton > img {
+	padding: 0.3vh;
+	max-width:auto;
+	max-height:2vh;
 }
 
 /* --------------------------------------------------------------------------------  

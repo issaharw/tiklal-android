@@ -66,7 +66,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             return
         }
 
-        if url!.description.lowercased().contains("nosachteiman") || url!.scheme == "tel" {
+        if url!.description.lowercased().contains("nosachteiman") || url!.scheme == "tel" || url!.scheme == "mailto" {
             decisionHandler(.cancel)
             UIApplication.shared.open(url!, options: [:])
         }

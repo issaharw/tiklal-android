@@ -3,13 +3,22 @@
 
 
 
-function scrollToCurrent() {
+function scrollToCurrent(scrollToDataPosition = 0) {
     var scrollTo = 0
     containerDiv.children().each( (index, child) => {
         var major = parseInt($(child).attr("major"))
         var minor = parseInt($(child).attr("minor"))
-        if (major == 9 || (major == currentMajor && minor == currentMinor))
+        if (major == NUMBER_OF_MAJORS || (major == currentMajor && minor == currentMinor)) {
+            if (scrollToDataPosition > 0) {
+                $(child).children().each( (idx, dataPos) => {
+                    if (idx >= scrollToDataPosition)
+                        return false
+                    scrollTo += $(dataPos).height() 
+                });
+                scrollTo -= 10
+            }
             return false
+        }
         
         scrollTo += $(contentId(major, minor)).height()
     });
@@ -115,9 +124,9 @@ function goToNext() {
     updateTitleWithCurrent()
 }
 
-function goUp() {
-    if (containerDiv.is(":hidden"))
-        buildMainMenu()
-    else
-        buildMinorMenu(currentMajor)
-}
+// function goUp() {
+//     if (containerDiv.is(":hidden"))
+//         buildMainMenu()
+//     else
+//         buildMinorMenu(currentMajor)
+// }
