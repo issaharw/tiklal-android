@@ -9,7 +9,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 private const val SP_DARK_MODE = "SP_DARK_MODE"

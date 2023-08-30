@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "Tiklal-Android"
+rootProject.name = "tiklal-android"
