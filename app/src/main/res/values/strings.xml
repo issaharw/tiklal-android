@@ -14,8 +14,5 @@
     <string name="add_current_bookmark">+ הוסף סימניה למיקום הנוכחי</string>
     <string name="bookmark_exists">סימניה זו כבר קיימת</string>
     <string name="position_saved">המיקום נשמר</string>
-    <string name="no_saved_position">אין מיקום שמור</string>
-    
-    <!-- Settings -->
-    <string name="auto_save_position">שמירה אוטומטית של מיקום</string>
+    <string name="back">חזרה</string>
 </resources>

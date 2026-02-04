@@ -20,9 +20,11 @@ import org.json.JSONObject
 private const val SP_DARK_MODE = "SP_DARK_MODE"
 private const val SP_OLD_COLORS = "SP_OLD_COLORS"
 private const val SP_FONT_SIZE = "SP_FONT_SIZE"
-private const val SP_AUTO_SAVE_POSITION = "SP_AUTO_SAVE_POSITION"
 private const val SP_LAST_POSITION = "SP_LAST_POSITION"
 private const val SP_BOOKMARKS = "SP_BOOKMARKS"
+
+// Feature flag: Set to true to show last position saving UI (auto-save toggle, continue reading, etc.)
+private const val SHOW_LAST_POSITION_UI = false
 
 class MainActivity : AppCompatActivity() {
 
@@ -81,8 +83,8 @@ class MainActivity : AppCompatActivity() {
         val darkMode = "darkMode=${prefs.getBoolean(SP_DARK_MODE, false)}"
         val oldColors = "oldColors=${prefs.getBoolean(SP_OLD_COLORS, false)}"
         val fontSize = "fontSize=${prefs.getInt(SP_FONT_SIZE, 2)}"
-        val autoSave = "autoSave=${prefs.getBoolean(SP_AUTO_SAVE_POSITION, true)}"
-        return "file:///android_asset/index.html?$darkMode&$fontSize&$oldColors&$autoSave"
+        val showLastPosition = "showLastPositionUI=$SHOW_LAST_POSITION_UI"
+        return "file:///android_asset/index.html?$darkMode&$fontSize&$oldColors&$showLastPosition"
     }
 
     private val client: WebViewClient = object : WebViewClient() {
@@ -96,15 +98,12 @@ class MainActivity : AppCompatActivity() {
                 val darkMode = request.url.getQueryParameter("darkMode")
                 val oldColors = request.url.getQueryParameter("oldColors")
                 val fontSize = request.url.getQueryParameter("fontSize")
-                val autoSave = request.url.getQueryParameter("autoSavePosition")
                 if (darkMode != null)
                     prefs.edit().putBoolean(SP_DARK_MODE, darkMode.toBoolean()).apply()
                 if (oldColors != null)
                     prefs.edit().putBoolean(SP_OLD_COLORS, oldColors.toBoolean()).apply()
                 if (fontSize != null)
                     prefs.edit().putInt(SP_FONT_SIZE, fontSize.toInt()).apply()
-                if (autoSave != null)
-                    prefs.edit().putBoolean(SP_AUTO_SAVE_POSITION, autoSave.toBoolean()).apply()
                 true
             }
         }
@@ -119,15 +118,16 @@ class MainActivity : AppCompatActivity() {
                 currentMajorTitle = majorTitle
                 currentMinorTitle = minorTitle
                 
-                // Auto-save position if enabled
-                if (prefs.getBoolean(SP_AUTO_SAVE_POSITION, true)) {
-                    saveCurrentPosition()
-                }
+                // Always save position
+                saveCurrentPosition()
             }
         }
 
         @JavascriptInterface
         fun onWebViewReady() {
+            // Only restore last position if the feature is enabled
+            if (!SHOW_LAST_POSITION_UI) return
+            
             // Check if there's a saved position to restore
             val lastPosJson = prefs.getString(SP_LAST_POSITION, null)
             if (lastPosJson != null) {
@@ -149,6 +149,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MINOR, currentMinor)
                 intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MAJOR_TITLE, currentMajorTitle)
                 intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MINOR_TITLE, currentMinorTitle)
+                intent.putExtra(BookmarksActivity.EXTRA_SHOW_LAST_POSITION_UI, SHOW_LAST_POSITION_UI)
                 bookmarksLauncher.launch(intent)
             }
         }
@@ -195,16 +196,13 @@ class MainActivity : AppCompatActivity() {
         @JavascriptInterface
         fun goToLastPosition() {
             val lastPosJson = prefs.getString(SP_LAST_POSITION, null)
-            if (lastPosJson != null) {
-                val bookmark = BookmarksActivity.parseBookmark(lastPosJson)
-                bookmark?.let {
-                    runOnUiThread {
-                        navigateToPosition(it.major, it.minor)
-                    }
-                }
-            } else {
-                runOnUiThread {
-                    Toast.makeText(this@MainActivity, R.string.no_saved_position, Toast.LENGTH_SHORT).show()
+            val bookmark = lastPosJson?.let { BookmarksActivity.parseBookmark(it) }
+            runOnUiThread {
+                if (bookmark != null) {
+                    navigateToPosition(bookmark.major, bookmark.minor)
+                } else {
+                    // First use - go to beginning
+                    navigateToPosition(0, 0)
                 }
             }
         }

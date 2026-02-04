@@ -57,12 +57,6 @@
 				</div>
 			</div>
 			<div class="settingsSection">
-				<span class="settingsLabel">שמירת מיקום אוטומטית:</span>
-				<div class="settingsValue">
-					<span id="autoSaveToggle" onclick="toggleAutoSave('#autoSaveToggle')">מופעל</span>
-				</div>
-			</div>
-			<div class="settingsSection">
 				<span class="settingsLabel">הצהרת פרטיות:</span>
 				<div class="settingsValue">
 					<span id="privacyPolicyUrl" class="fontSizeLink"><a href="https://www.freeprivacypolicy.com/live/41758e65-9917-407f-9248-079b92e5bbe4" target="_blank">Privacy Policy</a></span>
@@ -72,9 +66,9 @@
 		<!-- Bookmark Popup Menu -->
 		<div id="bookmarkPopup" class="bookmark-popup" style="display: none;">
 			<div class="bookmark-popup-content">
-				<div class="bookmark-popup-item" onclick="goToLastPosition()">המשך מהמיקום האחרון</div>
+				<div id="popupGoToLast" class="bookmark-popup-item" onclick="goToLastPosition()">המשך מהמיקום האחרון</div>
 				<div class="bookmark-popup-item" onclick="addBookmark()">הוסף סימניה</div>
-				<div class="bookmark-popup-item" onclick="savePosition()">שמור מיקום</div>
+				<div id="popupSavePosition" class="bookmark-popup-item" onclick="savePosition()">שמור מיקום</div>
 				<div class="bookmark-popup-item" onclick="openBookmarks()">צפה בסימניות</div>
 				<div class="bookmark-popup-item bookmark-popup-cancel" onclick="hideBookmarkPopup()">ביטול</div>
 			</div>

@@ -35,6 +35,7 @@ class BookmarksActivity : AppCompatActivity() {
     private var currentMinor: Int = 0
     private var currentMajorTitle: String = ""
     private var currentMinorTitle: String = ""
+    private var showLastPositionUI: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class BookmarksActivity : AppCompatActivity() {
         currentMinor = intent.getIntExtra(EXTRA_CURRENT_MINOR, 0)
         currentMajorTitle = intent.getStringExtra(EXTRA_CURRENT_MAJOR_TITLE) ?: ""
         currentMinorTitle = intent.getStringExtra(EXTRA_CURRENT_MINOR_TITLE) ?: ""
+        showLastPositionUI = intent.getBooleanExtra(EXTRA_SHOW_LAST_POSITION_UI, true)
 
         rvBookmarks = findViewById(R.id.rvBookmarks)
         tvEmptyState = findViewById(R.id.tvEmptyState)
@@ -52,6 +54,10 @@ class BookmarksActivity : AppCompatActivity() {
         tvLastPosition = findViewById(R.id.tvLastPosition)
         btnContinueReading = findViewById(R.id.btnContinueReading)
         btnAddBookmark = findViewById(R.id.btnAddBookmark)
+
+        findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
 
         rvBookmarks.layoutManager = LinearLayoutManager(this)
 
@@ -110,13 +116,17 @@ class BookmarksActivity : AppCompatActivity() {
             )
         }
 
-        lastPosition?.let { pos ->
-            layoutLastPosition.visibility = View.VISIBLE
-            tvLastPosition.text = "${pos.majorTitle}\n${pos.minorTitle}"
-            btnContinueReading.setOnClickListener {
-                navigateToBookmark(pos)
+        if (showLastPositionUI) {
+            lastPosition?.let { pos ->
+                layoutLastPosition.visibility = View.VISIBLE
+                tvLastPosition.text = "${pos.majorTitle}\n${pos.minorTitle}"
+                btnContinueReading.setOnClickListener {
+                    navigateToBookmark(pos)
+                }
+            } ?: run {
+                layoutLastPosition.visibility = View.GONE
             }
-        } ?: run {
+        } else {
             layoutLastPosition.visibility = View.GONE
         }
     }
@@ -159,6 +169,7 @@ class BookmarksActivity : AppCompatActivity() {
         const val EXTRA_CURRENT_MINOR = "EXTRA_CURRENT_MINOR"
         const val EXTRA_CURRENT_MAJOR_TITLE = "EXTRA_CURRENT_MAJOR_TITLE"
         const val EXTRA_CURRENT_MINOR_TITLE = "EXTRA_CURRENT_MINOR_TITLE"
+        const val EXTRA_SHOW_LAST_POSITION_UI = "EXTRA_SHOW_LAST_POSITION_UI"
 
         fun parseBookmarks(json: String): MutableList<Bookmark> {
             val list = mutableListOf<Bookmark>()
