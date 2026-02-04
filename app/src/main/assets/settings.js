@@ -59,6 +59,24 @@ function setFontSize(element, value) {
     window.open("settings://tiklal?fontSize=" + fontSize , '_blank');
 }
 
+var autoSavePosition = true
+
+// Initialize autoSavePosition from URL parameter
+if (window.location.search.indexOf('autoSave=false') >= 0) {
+    autoSavePosition = false
+}
+
+function toggleAutoSave(element) {
+    autoSavePosition = !autoSavePosition
+    if (autoSavePosition) {
+        $(element).text('מופעל')
+    }
+    else {
+        $(element).text('כבוי')    
+    }
+    window.open("settings://tiklal?autoSavePosition=" + autoSavePosition , '_blank');
+}
+
 function showSettingsScreen() {
     if (darkMode) {
         $("#darkModeToggle").text('מופעל')
@@ -71,6 +89,12 @@ function showSettingsScreen() {
     }
     else {
         $("#oldColorsToggle").text('כבוי')    
+    }
+    if (autoSavePosition) {
+        $("#autoSaveToggle").text('מופעל')
+    }
+    else {
+        $("#autoSaveToggle").text('כבוי')    
     }
     var fontSizeElementId = "#fontSize" + fontSize
     $(fontSizeElementId).css("text-decoration", "none")
