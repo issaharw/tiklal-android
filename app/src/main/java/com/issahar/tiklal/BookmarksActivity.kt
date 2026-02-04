@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,25 +25,64 @@ class BookmarksActivity : AppCompatActivity() {
     private lateinit var layoutLastPosition: LinearLayout
     private lateinit var tvLastPosition: TextView
     private lateinit var btnContinueReading: Button
+    private lateinit var btnAddBookmark: Button
     
     private var bookmarks: MutableList<Bookmark> = mutableListOf()
     private var lastPosition: Bookmark? = null
+    
+    // Current position passed from MainActivity
+    private var currentMajor: Int = 0
+    private var currentMinor: Int = 0
+    private var currentMajorTitle: String = ""
+    private var currentMinorTitle: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bookmarks)
+
+        // Get current position from intent
+        currentMajor = intent.getIntExtra(EXTRA_CURRENT_MAJOR, 0)
+        currentMinor = intent.getIntExtra(EXTRA_CURRENT_MINOR, 0)
+        currentMajorTitle = intent.getStringExtra(EXTRA_CURRENT_MAJOR_TITLE) ?: ""
+        currentMinorTitle = intent.getStringExtra(EXTRA_CURRENT_MINOR_TITLE) ?: ""
 
         rvBookmarks = findViewById(R.id.rvBookmarks)
         tvEmptyState = findViewById(R.id.tvEmptyState)
         layoutLastPosition = findViewById(R.id.layoutLastPosition)
         tvLastPosition = findViewById(R.id.tvLastPosition)
         btnContinueReading = findViewById(R.id.btnContinueReading)
+        btnAddBookmark = findViewById(R.id.btnAddBookmark)
 
         rvBookmarks.layoutManager = LinearLayoutManager(this)
+
+        btnAddBookmark.setOnClickListener {
+            addCurrentPositionAsBookmark()
+        }
 
         loadBookmarks()
         loadLastPosition()
         updateUI()
+    }
+
+    private fun addCurrentPositionAsBookmark() {
+        // Check if bookmark already exists
+        val exists = bookmarks.any { it.major == currentMajor && it.minor == currentMinor }
+        if (exists) {
+            Toast.makeText(this, R.string.bookmark_exists, Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        val newBookmark = Bookmark(
+            major = currentMajor,
+            minor = currentMinor,
+            majorTitle = currentMajorTitle,
+            minorTitle = currentMinorTitle
+        )
+        bookmarks.add(0, newBookmark) // Add to beginning
+        saveBookmarks()
+        updateUI()
+        
+        Toast.makeText(this, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
     }
 
     private fun loadBookmarks() {
@@ -115,6 +155,10 @@ class BookmarksActivity : AppCompatActivity() {
         const val SP_LAST_POSITION = "SP_LAST_POSITION"
         const val EXTRA_MAJOR = "EXTRA_MAJOR"
         const val EXTRA_MINOR = "EXTRA_MINOR"
+        const val EXTRA_CURRENT_MAJOR = "EXTRA_CURRENT_MAJOR"
+        const val EXTRA_CURRENT_MINOR = "EXTRA_CURRENT_MINOR"
+        const val EXTRA_CURRENT_MAJOR_TITLE = "EXTRA_CURRENT_MAJOR_TITLE"
+        const val EXTRA_CURRENT_MINOR_TITLE = "EXTRA_CURRENT_MINOR_TITLE"
 
         fun parseBookmarks(json: String): MutableList<Bookmark> {
             val list = mutableListOf<Bookmark>()

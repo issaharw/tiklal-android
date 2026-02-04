@@ -10,11 +10,9 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -30,13 +28,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var prefs: SharedPreferences
     private lateinit var webView: WebView
-    private lateinit var fabBookmark: FloatingActionButton
     
     private var currentMajor: Int = 0
     private var currentMinor: Int = 0
     private var currentMajorTitle: String = ""
     private var currentMinorTitle: String = ""
-    private var pendingNavigation: Pair<Int, Int>? = null
 
     private val bookmarksLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -57,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         
         webView = findViewById(R.id.webView)
-        fabBookmark = findViewById(R.id.fabBookmark)
         
         webView.settings.javaScriptEnabled = true
         webView.settings.javaScriptCanOpenWindowsAutomatically = true
@@ -66,70 +61,6 @@ class MainActivity : AppCompatActivity() {
         val url = buildUrl()
         webView.loadUrl(url)
         webView.webViewClient = client
-
-        setupFab()
-    }
-
-    private fun setupFab() {
-        fabBookmark.setOnClickListener { view ->
-            val popup = PopupMenu(this, view)
-            popup.menuInflater.inflate(R.menu.bookmark_menu, popup.menu)
-            
-            popup.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.action_add_bookmark -> {
-                        addCurrentPositionAsBookmark()
-                        true
-                    }
-                    R.id.action_save_position -> {
-                        saveCurrentPosition()
-                        Toast.makeText(this, R.string.position_saved, Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    R.id.action_view_bookmarks -> {
-                        val intent = Intent(this, BookmarksActivity::class.java)
-                        bookmarksLauncher.launch(intent)
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popup.show()
-        }
-    }
-
-    private fun addCurrentPositionAsBookmark() {
-        val bookmarksJson = prefs.getString(SP_BOOKMARKS, "[]") ?: "[]"
-        val bookmarks = BookmarksActivity.parseBookmarks(bookmarksJson)
-        
-        // Check if bookmark already exists
-        val exists = bookmarks.any { it.major == currentMajor && it.minor == currentMinor }
-        if (exists) {
-            Toast.makeText(this, R.string.bookmark_exists, Toast.LENGTH_SHORT).show()
-            return
-        }
-        
-        val newBookmark = Bookmark(
-            major = currentMajor,
-            minor = currentMinor,
-            majorTitle = currentMajorTitle,
-            minorTitle = currentMinorTitle
-        )
-        bookmarks.add(0, newBookmark) // Add to beginning
-        
-        val jsonArray = JSONArray()
-        bookmarks.forEach { bookmark ->
-            val obj = JSONObject()
-            obj.put("major", bookmark.major)
-            obj.put("minor", bookmark.minor)
-            obj.put("majorTitle", bookmark.majorTitle)
-            obj.put("minorTitle", bookmark.minorTitle)
-            obj.put("timestamp", bookmark.timestamp)
-            jsonArray.put(obj)
-        }
-        prefs.edit().putString(SP_BOOKMARKS, jsonArray.toString()).apply()
-        
-        Toast.makeText(this, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
     }
 
     private fun saveCurrentPosition() {
@@ -206,6 +137,74 @@ class MainActivity : AppCompatActivity() {
                     runOnUiThread {
                         navigateToPosition(it.major, it.minor)
                     }
+                }
+            }
+        }
+
+        @JavascriptInterface
+        fun openBookmarksScreen() {
+            runOnUiThread {
+                val intent = Intent(this@MainActivity, BookmarksActivity::class.java)
+                intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MAJOR, currentMajor)
+                intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MINOR, currentMinor)
+                intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MAJOR_TITLE, currentMajorTitle)
+                intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MINOR_TITLE, currentMinorTitle)
+                bookmarksLauncher.launch(intent)
+            }
+        }
+
+        @JavascriptInterface
+        fun addBookmark() {
+            runOnUiThread {
+                // Load existing bookmarks
+                val bookmarksJson = prefs.getString(SP_BOOKMARKS, "[]") ?: "[]"
+                val bookmarksArray = JSONArray(bookmarksJson)
+                
+                // Check if bookmark already exists
+                for (i in 0 until bookmarksArray.length()) {
+                    val existing = bookmarksArray.getJSONObject(i)
+                    if (existing.getInt("major") == currentMajor && 
+                        existing.getInt("minor") == currentMinor) {
+                        Toast.makeText(this@MainActivity, R.string.bookmark_exists, Toast.LENGTH_SHORT).show()
+                        return@runOnUiThread
+                    }
+                }
+                
+                // Add new bookmark
+                val bookmark = JSONObject()
+                bookmark.put("major", currentMajor)
+                bookmark.put("minor", currentMinor)
+                bookmark.put("majorTitle", currentMajorTitle)
+                bookmark.put("minorTitle", currentMinorTitle)
+                bookmark.put("timestamp", System.currentTimeMillis())
+                bookmarksArray.put(bookmark)
+                
+                prefs.edit().putString(SP_BOOKMARKS, bookmarksArray.toString()).apply()
+                Toast.makeText(this@MainActivity, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        @JavascriptInterface
+        fun savePosition() {
+            runOnUiThread {
+                saveCurrentPosition()
+                Toast.makeText(this@MainActivity, R.string.position_saved, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        @JavascriptInterface
+        fun goToLastPosition() {
+            val lastPosJson = prefs.getString(SP_LAST_POSITION, null)
+            if (lastPosJson != null) {
+                val bookmark = BookmarksActivity.parseBookmark(lastPosJson)
+                bookmark?.let {
+                    runOnUiThread {
+                        navigateToPosition(it.major, it.minor)
+                    }
+                }
+            } else {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, R.string.no_saved_position, Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -69,12 +69,23 @@
 				</div>
 			</div>
 		</div>
+		<!-- Bookmark Popup Menu -->
+		<div id="bookmarkPopup" class="bookmark-popup" style="display: none;">
+			<div class="bookmark-popup-content">
+				<div class="bookmark-popup-item" onclick="goToLastPosition()">המשך מהמיקום האחרון</div>
+				<div class="bookmark-popup-item" onclick="addBookmark()">הוסף סימניה</div>
+				<div class="bookmark-popup-item" onclick="savePosition()">שמור מיקום</div>
+				<div class="bookmark-popup-item" onclick="openBookmarks()">צפה בסימניות</div>
+				<div class="bookmark-popup-item bookmark-popup-cancel" onclick="hideBookmarkPopup()">ביטול</div>
+			</div>
+		</div>
 		<div class="footer">
 			<div class="footerButtons">
 				<div onClick='buildMainMenu()' class="footerButton">ראשי</div>
 				<div onClick='goToPrev();' class="footerButton"><img src="right.png"></div>
 				<div onClick='goToNext()' class="footerButton"><img src="left.png"></div>
 				<div onClick='showSearch()' class="footerSearchButton"><img src="search-white.png"></div>
+				<div onClick='showBookmarkPopup()' class="footerButton" style="font-size: 2.5vh;"><span style="filter: grayscale(1) brightness(10);">🔖</span></div>
 			</div>
 			<div class="footerHR">
 				<hr style="width: 100%;">

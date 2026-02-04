@@ -41,6 +41,47 @@ function navigateToPosition(major, minor) {
     showContent(major, minor);
 }
 
+// Popup menu functions
+function showBookmarkPopup() {
+    $('#bookmarkPopup').show();
+}
+
+function hideBookmarkPopup() {
+    $('#bookmarkPopup').hide();
+}
+
+// Called when user clicks add bookmark in popup
+function addBookmark() {
+    hideBookmarkPopup();
+    if (typeof AndroidBridge !== 'undefined') {
+        AndroidBridge.addBookmark();
+    }
+}
+
+// Called when user clicks save position in popup
+function savePosition() {
+    hideBookmarkPopup();
+    if (typeof AndroidBridge !== 'undefined') {
+        AndroidBridge.savePosition();
+    }
+}
+
+// Called when user clicks view bookmarks in popup
+function openBookmarks() {
+    hideBookmarkPopup();
+    if (typeof AndroidBridge !== 'undefined') {
+        AndroidBridge.openBookmarksScreen();
+    }
+}
+
+// Called when user clicks go to last position in popup
+function goToLastPosition() {
+    hideBookmarkPopup();
+    if (typeof AndroidBridge !== 'undefined') {
+        AndroidBridge.goToLastPosition();
+    }
+}
+
 // Hook into the existing updateTitleWithCurrent function to report position changes
 var originalUpdateTitleWithCurrent = updateTitleWithCurrent;
 updateTitleWithCurrent = function() {
