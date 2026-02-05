@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">תִּכְּלַאל</string>
+    
+    <!-- Bookmarks -->
+    <string name="add_bookmark">הוסף סימניה</string>
+    <string name="save_position">שמור מיקום</string>
+    <string name="view_bookmarks">סימניות ומיקום</string>
+    <string name="bookmarks_title">סימניות</string>
+    <string name="delete_bookmark">מחק סימניה</string>
+    <string name="no_bookmarks">אין סימניות שמורות</string>
+    <string name="continue_reading">המשך קריאה מהמיקום האחרון:</string>
+    <string name="go_to_position">עבור למיקום</string>
+    <string name="bookmark_added">הסימניה נוספה</string>
+    <string name="add_current_bookmark">+ הוסף סימניה למיקום הנוכחי</string>
+    <string name="bookmark_exists">סימניה זו כבר קיימת</string>
+    <string name="position_saved">המיקום נשמר</string>
+    <string name="back">חזרה</string>
 </resources>

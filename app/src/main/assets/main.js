@@ -19,7 +19,31 @@ if (window.location.search.indexOf('ipad=true') >= 0) {
     
 if (window.location.search.indexOf('oldColors=true') >= 0) {
     oldColors = true
-    document.write('<link rel="stylesheet" href="oldColors.css" />');
+}
+
+// Function to apply/remove old colors dynamically
+function applyOldColors(enable) {
+    var existingLink = document.getElementById('oldColorsStylesheet');
+    if (enable) {
+        if (!existingLink) {
+            var link = document.createElement('link');
+            link.id = 'oldColorsStylesheet';
+            link.rel = 'stylesheet';
+            link.href = 'oldColors.css';
+            document.head.appendChild(link);
+        }
+    } else {
+        if (existingLink) {
+            existingLink.remove();
+        }
+    }
+}
+
+// Apply old colors on load if enabled
+if (oldColors) {
+    document.addEventListener('DOMContentLoaded', function() {
+        applyOldColors(true);
+    });
 }
     
 if (window.location.search.indexOf('darkMode=true') >= 0) {
