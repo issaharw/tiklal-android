@@ -9,4 +9,11 @@
     <color name="darkSecondary">#2C2C2E</color>
     <color name="darkTextPrimary">#FFFFFF</color>
     <color name="darkTextSecondary">#AAAAAA</color>
+    
+    <!-- Old colors -->
+    <color name="oldHeader">#F1DBA9</color>
+    <color name="oldBackground">#FEF9E3</color>
+    <color name="oldText">#542b22</color>
+    <color name="oldButtonBg">#542b22</color>
+    <color name="oldButtonText">#FEF9E3</color>
 </resources>
