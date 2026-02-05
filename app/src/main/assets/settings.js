@@ -38,6 +38,7 @@ function toggleOldColors(element) {
     }
 
     applySettings()
+    applyOldColors(oldColors)
     window.open("settings://tiklal?oldColors=" + oldColors , '_blank');
 }
 
