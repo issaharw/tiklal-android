@@ -150,6 +150,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MAJOR_TITLE, currentMajorTitle)
                 intent.putExtra(BookmarksActivity.EXTRA_CURRENT_MINOR_TITLE, currentMinorTitle)
                 intent.putExtra(BookmarksActivity.EXTRA_SHOW_LAST_POSITION_UI, SHOW_LAST_POSITION_UI)
+                intent.putExtra(BookmarksActivity.EXTRA_DARK_MODE, prefs.getBoolean(SP_DARK_MODE, false))
                 bookmarksLauncher.launch(intent)
             }
         }

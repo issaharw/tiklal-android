@@ -36,6 +36,7 @@ class BookmarksActivity : AppCompatActivity() {
     private var currentMajorTitle: String = ""
     private var currentMinorTitle: String = ""
     private var showLastPositionUI: Boolean = true
+    private var isDarkMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +48,7 @@ class BookmarksActivity : AppCompatActivity() {
         currentMajorTitle = intent.getStringExtra(EXTRA_CURRENT_MAJOR_TITLE) ?: ""
         currentMinorTitle = intent.getStringExtra(EXTRA_CURRENT_MINOR_TITLE) ?: ""
         showLastPositionUI = intent.getBooleanExtra(EXTRA_SHOW_LAST_POSITION_UI, true)
+        isDarkMode = intent.getBooleanExtra(EXTRA_DARK_MODE, false)
 
         rvBookmarks = findViewById(R.id.rvBookmarks)
         tvEmptyState = findViewById(R.id.tvEmptyState)
@@ -65,9 +67,47 @@ class BookmarksActivity : AppCompatActivity() {
             addCurrentPositionAsBookmark()
         }
 
+        // Apply dark mode colors
+        applyDarkMode()
+
         loadBookmarks()
         loadLastPosition()
         updateUI()
+    }
+
+    private fun applyDarkMode() {
+        val rootView = findViewById<View>(android.R.id.content)
+        val headerLayout = findViewById<View>(R.id.headerLayout)
+        val mainLayout = headerLayout.parent as View
+        
+        if (isDarkMode) {
+            val darkBg = resources.getColor(R.color.darkBackground, theme)
+            val darkSecondary = resources.getColor(R.color.darkSecondary, theme)
+            val darkTextSecondary = resources.getColor(R.color.darkTextSecondary, theme)
+            val darkTextPrimary = resources.getColor(R.color.darkTextPrimary, theme)
+            
+            // Main background
+            rootView.setBackgroundColor(darkBg)
+            mainLayout.setBackgroundColor(darkBg)
+            
+            // Header
+            headerLayout.setBackgroundColor(darkBg)
+            
+            // RecyclerView
+            rvBookmarks.setBackgroundColor(darkBg)
+            
+            // Empty state text
+            tvEmptyState.setTextColor(darkTextSecondary)
+            
+            // Last position section
+            layoutLastPosition.setBackgroundColor(darkBg)
+            
+            // Buttons
+            btnAddBookmark.setBackgroundColor(darkSecondary)
+            btnAddBookmark.setTextColor(darkTextPrimary)
+            btnContinueReading.setBackgroundColor(darkSecondary)
+            btnContinueReading.setTextColor(darkTextPrimary)
+        }
     }
 
     private fun addCurrentPositionAsBookmark() {
@@ -110,7 +150,7 @@ class BookmarksActivity : AppCompatActivity() {
         } else {
             rvBookmarks.visibility = View.VISIBLE
             tvEmptyState.visibility = View.GONE
-            rvBookmarks.adapter = BookmarksAdapter(bookmarks, 
+            rvBookmarks.adapter = BookmarksAdapter(bookmarks, isDarkMode,
                 onItemClick = { bookmark -> navigateToBookmark(bookmark) },
                 onDeleteClick = { position -> deleteBookmark(position) }
             )
@@ -170,6 +210,7 @@ class BookmarksActivity : AppCompatActivity() {
         const val EXTRA_CURRENT_MAJOR_TITLE = "EXTRA_CURRENT_MAJOR_TITLE"
         const val EXTRA_CURRENT_MINOR_TITLE = "EXTRA_CURRENT_MINOR_TITLE"
         const val EXTRA_SHOW_LAST_POSITION_UI = "EXTRA_SHOW_LAST_POSITION_UI"
+        const val EXTRA_DARK_MODE = "EXTRA_DARK_MODE"
 
         fun parseBookmarks(json: String): MutableList<Bookmark> {
             val list = mutableListOf<Bookmark>()
@@ -219,6 +260,7 @@ data class Bookmark(
 
 class BookmarksAdapter(
     private val bookmarks: List<Bookmark>,
+    private val isDarkMode: Boolean,
     private val onItemClick: (Bookmark) -> Unit,
     private val onDeleteClick: (Int) -> Unit
 ) : RecyclerView.Adapter<BookmarksAdapter.ViewHolder>() {
@@ -241,6 +283,18 @@ class BookmarksAdapter(
         holder.tvMinorTitle.text = bookmark.minorTitle
         holder.itemView.setOnClickListener { onItemClick(bookmark) }
         holder.btnDelete.setOnClickListener { onDeleteClick(position) }
+        
+        // Apply dark mode colors
+        if (isDarkMode) {
+            val context = holder.itemView.context
+            val darkBg = context.resources.getColor(R.color.darkBackground, context.theme)
+            val darkTextPrimary = context.resources.getColor(R.color.darkTextPrimary, context.theme)
+            val darkTextSecondary = context.resources.getColor(R.color.darkTextSecondary, context.theme)
+            
+            holder.itemView.setBackgroundColor(darkBg)
+            holder.tvMajorTitle.setTextColor(darkTextSecondary)
+            holder.tvMinorTitle.setTextColor(darkTextPrimary)
+        }
     }
 
     override fun getItemCount() = bookmarks.size

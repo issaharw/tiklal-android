@@ -3,4 +3,10 @@
     <color name="colorPrimary">#426F8C</color>
     <color name="colorPrimaryDark">#5C84A2</color>
     <color name="colorAccent">#9AC0DF</color>
+    
+    <!-- Dark mode colors -->
+    <color name="darkBackground">#1C1C1E</color>
+    <color name="darkSecondary">#2C2C2E</color>
+    <color name="darkTextPrimary">#FFFFFF</color>
+    <color name="darkTextSecondary">#AAAAAA</color>
 </resources>
