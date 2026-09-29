@@ -133,6 +133,13 @@ class BookmarksActivity : AppCompatActivity() {
             // Last position section
             layoutLastPosition.setBackgroundColor(oldHeader)
             tvLastPosition.setTextColor(oldText)
+            // Update all text views in last position section
+            for (i in 0 until layoutLastPosition.childCount) {
+                val child = layoutLastPosition.getChildAt(i)
+                if (child is TextView) {
+                    child.setTextColor(oldText)
+                }
+            }
             
             // Buttons
             btnAddBookmark.setBackgroundColor(oldButtonBg)
