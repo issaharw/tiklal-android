@@ -117,6 +117,12 @@ body{
 	user-select: none;
 }
 
+/* Inputs must stay selectable, otherwise some WebViews (e.g. Samsung) won't focus them or open the keyboard */
+input, textarea {
+	-webkit-user-select: text;
+	user-select: text;
+}
+
 #main {
 	height: 100%;
 	display: flex;

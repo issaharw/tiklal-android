@@ -56,3 +56,10 @@ function clearSearchInput() {
     updateTitle('חיפוש')
     searchResultsDiv.empty()
 }
+
+// Explicitly focus the search input on tap, for WebViews that don't do it on their own
+$(document).ready(function() {
+    $("#searchInput").on("click touchend", function() {
+        this.focus()
+    })
+})
